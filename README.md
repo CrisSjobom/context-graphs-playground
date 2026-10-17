@@ -1,8 +1,8 @@
-# Context Graphs Playground
+# ContextOps — Context Graphs Playground
 
 **Make operational decisions traceable.**
 
-A small reference implementation for investigating logistics incidents through a directed context graph. Instead of reducing an incident to a ticket status, the graph connects the affected job, operational events, assigned resources, governing policy, and the decision taken.
+An evolving reference implementation for investigating logistics incidents through a directed context graph. Instead of reducing an incident to a ticket status, the graph connects the affected job, operational events, assigned resources, governing policy, and the decision taken.
 
 > **Scope:** An independent learning project using fictional operations, identifiers, and event data. It does not connect to or reproduce any employer's production systems.
 
@@ -19,6 +19,26 @@ This playground models those connections explicitly and preserves a path from an
 - Traces related nodes using breadth-first traversal, returning explicit relation paths.
 - Exports a standalone, interactive HTML graph with a node inspector and no server requirement.
 - Rejects duplicate node IDs, dangling references, and invalid traversal depths.
+
+## Operational intelligence workbench (v0.2)
+
+The project now includes a second, **locally hosted** workbench, built around an append-only SQLite event journal and deterministic policy evaluation:
+
+- **Durable event ingestion** with event ID deduplication and conflicting-replay rejection.
+- **Temporal state reconstruction** so late-arriving events are replayed by occurrence time.
+- **Operational policy checks** that flag closure without custody verification and payment without custody verification.
+- **Evidence-first findings** with stable event IDs and a derived context graph.
+- **Investigation API and interactive workbench**, separate from the static GitHub Pages graph preview.
+
+Run from the repository root:
+
+```bash
+python -m app.server
+```
+
+Then open **http://127.0.0.1:8000/operations.html** to append synthetic events and investigate a task. The API includes `POST /api/events`, `GET /api/tasks`, and `GET /api/investigate?task_id=...`. See [the event sourcing and API notes](docs/event-sourcing.md) for the contract, an example, and limitations.
+
+**Deployment boundary:** The event API is intentionally local-only and unauthenticated. Do not expose it to the internet. GitHub Pages serves only the static preview at `demo.html`, not the live API.
 
 ## Quick start
 
@@ -53,9 +73,11 @@ See [architecture](docs/architecture.md) for model boundaries and possible next 
 
 ```text
 src/context_graphs/  graph model, synthetic fixture, traversal, and HTML export
-tests/               validation and traversal tests
+tests/               graph traversal and event journal tests
 docs/                architectural decisions and limitations
 demo.html            standalone interactive graph preview
+web/operations.html  local API-backed investigation workbench
+app/operations.py    SQLite event journal, replay and evidence checks
 ```
 
 ## Quality checks
@@ -68,8 +90,9 @@ ruff check .
 
 ## Roadmap
 
-- [ ] Timeline-aware traversal and event ordering
+- [x] Durable event journal and event-time reconstruction
 - [ ] Query predicates by relationship and node type
+- [ ] Persistent rule versioning and correction events
 - [ ] Optional Neo4j adapter and Cypher query examples
 - [ ] Human-readable explanation report with provenance
 - [ ] Larger synthetic scenarios and performance profiling

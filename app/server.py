@@ -7,10 +7,12 @@ import mimetypes
 import os
 
 from app.graph import GraphError, shortest_path, neighborhood, validate_graph
+from app.operations import DomainError, connect, ingest, evaluate, operational_graph
 
 ROOT = Path(__file__).resolve().parent.parent
 GRAPH = validate_graph(json.loads((ROOT / "data" / "scenario.json").read_text(encoding="utf-8")))
 PUBLIC = ROOT / "web"
+DB = connect(os.environ.get("CONTEXTOPS_DB", str(ROOT / "contextops.sqlite")))
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -26,9 +28,31 @@ class Handler(BaseHTTPRequestHandler):
     def json(self, value, status=200):
         self.send_bytes(json.dumps(value, ensure_ascii=False).encode("utf-8"), status=status)
 
+    def do_POST(self):
+        if urlparse(self.path).path != "/api/events":
+            return self.json({"error": "Not found"}, 404)
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if not 0 < length <= 65536:
+                return self.json({"error": "Body must be between 1 and 65536 bytes"}, 413)
+            payload = json.loads(self.rfile.read(length))
+            inserted = ingest(DB, payload)
+            return self.json({"inserted": inserted, "event_id": payload["event_id"]}, 201 if inserted else 200)
+        except (DomainError, ValueError, KeyError, json.JSONDecodeError) as exc:
+            return self.json({"error": str(exc)}, 400)
+
     def do_GET(self):
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
+        if parsed.path == "/api/tasks":
+            rows = DB.execute("SELECT DISTINCT task_id FROM events ORDER BY task_id").fetchall()
+            return self.json({"tasks": [row[0] for row in rows]})
+        if parsed.path == "/api/investigate":
+            task_id = params.get("task_id", [""])[0]
+            if not task_id:
+                return self.json({"error": "task_id is required"}, 400)
+            report = evaluate(DB, task_id)
+            return self.json({**report, "graph": operational_graph(report)})
         if parsed.path == "/api/graph":
             return self.json(GRAPH)
         if parsed.path == "/api/health":
@@ -42,7 +66,7 @@ class Handler(BaseHTTPRequestHandler):
         except (GraphError, ValueError) as exc:
             return self.json({"error": str(exc)}, status=400)
         # Restrict static responses to explicit known files; no arbitrary file reads.
-        assets = {"/": "index.html", "/index.html": "index.html", "/styles.css": "styles.css", "/app.js": "app.js", "/favicon.svg": "favicon.svg"}
+        assets = {"/": "index.html", "/index.html": "index.html", "/styles.css": "styles.css", "/app.js": "app.js", "/favicon.svg": "favicon.svg", "/operations.html": "operations.html"}
         if parsed.path not in assets:
             return self.json({"error": "Not found"}, status=404)
         path = PUBLIC / assets[parsed.path]
