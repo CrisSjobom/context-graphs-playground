@@ -1,0 +1,43 @@
+{
+  "name": "Dispatch exception / SP-042",
+  "description": "Synthetic operational scenario: a recovery request is marked completed while the asset remains in customer custody.",
+  "nodes": [
+    {"id":"case-042","label":"Case SP-042","type":"case","subtitle":"Recovery exception","details":"A recovery workflow closed before confirmed physical handover.","status":"needs-review"},
+    {"id":"asset-318","label":"Asset 318","type":"asset","subtitle":"Motorcycle","details":"Asset remained at the customer location at the end of the shift.","status":"at-risk"},
+    {"id":"task-779","label":"Recovery task","type":"task","subtitle":"Third-party dispatch","details":"Task state changed to completed based on driver input.","status":"closed"},
+    {"id":"event-101","label":"Task created","type":"event","subtitle":"08:42 · event","details":"Recovery task registered for Asset 318.","time":"2026-09-14T08:42:00-03:00"},
+    {"id":"event-102","label":"Driver confirmed","type":"event","subtitle":"09:18 · event","details":"Driver submitted a collection confirmation. This is not proof of physical custody.","time":"2026-09-14T09:18:00-03:00"},
+    {"id":"event-103","label":"Payment settled","type":"event","subtitle":"09:26 · event","details":"Associated customer payment was settled.","time":"2026-09-14T09:26:00-03:00"},
+    {"id":"event-104","label":"Task closed","type":"event","subtitle":"09:31 · event","details":"Automated task closure followed the driver confirmation.","time":"2026-09-14T09:31:00-03:00"},
+    {"id":"event-105","label":"Custody mismatch","type":"event","subtitle":"17:05 · exception","details":"Operations discovered the motorcycle was still with the customer.","time":"2026-09-14T17:05:00-03:00","status":"at-risk"},
+    {"id":"actor-driver","label":"Partner driver","type":"actor","subtitle":"External partner","details":"Synthetic actor representing the recovery driver."},
+    {"id":"actor-customer","label":"Customer","type":"actor","subtitle":"Asset custodian","details":"Synthetic customer retained physical possession."},
+    {"id":"system-dispatch","label":"Dispatch API","type":"system","subtitle":"Workflow service","details":"Creates tasks and records operational status."},
+    {"id":"system-payments","label":"Payments API","type":"system","subtitle":"Financial events","details":"Reports settlement without asserting handover."},
+    {"id":"rule-01","label":"Closure rule","type":"rule","subtitle":"Decision policy","details":"Legacy rule assumed driver confirmation was sufficient for closure.","status":"needs-review"},
+    {"id":"signal-01","label":"No custody proof","type":"signal","subtitle":"Missing evidence","details":"No verified handover or custody transfer was attached to the case.","status":"at-risk"}
+  ],
+  "edges": [
+    {"source":"case-042","target":"asset-318","label":"concerns"},
+    {"source":"case-042","target":"task-779","label":"tracks"},
+    {"source":"task-779","target":"actor-driver","label":"assigned to"},
+    {"source":"asset-318","target":"actor-customer","label":"held by"},
+    {"source":"system-dispatch","target":"task-779","label":"manages"},
+    {"source":"task-779","target":"event-101","label":"started by"},
+    {"source":"actor-driver","target":"event-102","label":"submitted"},
+    {"source":"task-779","target":"event-102","label":"confirmed by"},
+    {"source":"system-payments","target":"event-103","label":"reported"},
+    {"source":"case-042","target":"event-103","label":"includes"},
+    {"source":"task-779","target":"event-104","label":"closed by"},
+    {"source":"rule-01","target":"event-104","label":"triggered"},
+    {"source":"event-102","target":"rule-01","label":"satisfied"},
+    {"source":"case-042","target":"event-105","label":"raised"},
+    {"source":"event-105","target":"signal-01","label":"supported by"},
+    {"source":"signal-01","target":"task-779","label":"challenges"},
+    {"source":"event-105","target":"asset-318","label":"observed"}
+  ],
+  "findings": [
+    {"id":"f-1","severity":"high","title":"Closure without custody evidence","description":"The case was closed after a driver confirmation, but the graph contains a later custody mismatch and no verified handover.","node_ids":["task-779","event-102","rule-01","event-104","event-105","signal-01"]},
+    {"id":"f-2","severity":"medium","title":"Financial and physical states diverged","description":"Payment settlement was recorded, but the asset's physical custody was not transferred.","node_ids":["event-103","asset-318","actor-customer","event-105"]}
+  ]
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b101b" />
+  <meta name="description" content="Explore how relationships and evidence explain operational incidents." />
+  <title>Context Graphs Playground — Operational intelligence, explained</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" aria-label="Primary navigation">
+      <a class="brand-mark" href="/" aria-label="Context Graphs home">CG<span>.</span></a>
+      <span class="rail-label">EXPERIMENT / 001</span>
+      <div class="rail-spacer"></div>
+      <span class="rail-bottom">LAB / 2026</span>
+    </aside>
+    <main class="workspace">
+      <header class="topbar">
+        <div class="breadcrumb"><span>PLAYGROUND</span><span class="crumb-divider">/</span><strong>Incident explorer</strong></div>
+        <div class="top-meta"><span class="live-dot"></span> LOCAL DEMO <span class="top-separator">•</span> SYNTHETIC DATA</div>
+      </header>
+      <section class="hero">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> EXPLORE THE WHY, NOT JUST THE WHAT</div><h1>Operational context,<br/><em>connected.</em></h1><p>A graph-based lens on operational decisions. Follow events, relationships, and missing evidence to understand where a process broke down.</p></div>
+        <div class="hero-index"><span>CASE STUDY</span><strong>01<span>/</span>01</strong><small>FIELD OPERATIONS</small></div>
+      </section>
+      <section class="metrics" aria-label="Graph summary">
+        <div class="metric"><span>ENTITIES</span><strong id="metric-nodes">—</strong><small>Connected nodes</small></div>
+        <div class="metric"><span>RELATIONSHIPS</span><strong id="metric-edges">—</strong><small>Operational links</small></div>
+        <div class="metric"><span>EVENTS</span><strong id="metric-events">—</strong><small>Chronological signals</small></div>
+        <div class="metric"><span>FINDINGS</span><strong id="metric-findings">—</strong><small>Patterns to inspect</small></div>
+      </section>
+      <section class="explorer" aria-label="Interactive graph explorer">
+        <div class="panel graph-panel">
+          <div class="panel-top"><div><span class="section-kicker">01 / RELATIONSHIP MAP</span><h2>Trace the connections</h2></div><button id="reset" class="ghost-button" type="button">↺ Reset view</button></div>
+          <div class="toolbar"><label for="type-filter">ENTITY TYPE</label><select id="type-filter"><option value="all">All entities</option></select><div class="toolbar-spacer"></div><label for="search">FIND ENTITY</label><input id="search" type="search" placeholder="Search the graph…" autocomplete="off" /></div>
+          <div class="graph-stage"><svg id="graph" role="img" aria-label="Interactive relationship graph" viewBox="0 0 920 570" preserveAspectRatio="xMidYMid meet"><g id="graph-edges"></g><g id="graph-nodes"></g></svg><div class="graph-hint">SELECT A NODE TO INSPECT ITS CONTEXT <span>↗</span></div></div>
+          <div class="legend" id="legend"></div>
+        </div>
+        <aside class="panel context-panel" aria-label="Selected entity and analysis">
+          <div class="panel-top"><div><span class="section-kicker">02 / ENTITY INSPECTOR</span><h2>In context</h2></div><span class="inspector-icon">↗</span></div>
+          <div id="inspector" aria-live="polite"></div>
+          <div class="rule"></div>
+          <div class="section-kicker findings-title">03 / SYSTEM FINDINGS</div><div id="findings"></div>
+        </aside>
+      </section>
+      <section class="bottom-grid">
+        <div class="panel timeline-panel"><div class="panel-top"><div><span class="section-kicker">04 / EVENT SEQUENCE</span><h2>What happened, and when</h2></div></div><div id="timeline" class="timeline"></div></div>
+        <div class="panel explanation-panel"><div class="panel-top"><div><span class="section-kicker">05 / EXPLANATION PATH</span><h2>Connect two signals</h2></div></div><p>Find the shortest relationship path between entities, then inspect each step in the graph.</p><label for="path-from">FROM</label><select id="path-from"></select><label for="path-to">TO</label><select id="path-to"></select><button id="trace" class="primary-button" type="button">Trace connection <span>↗</span></button><div id="path-output" aria-live="polite"></div></div>
+      </section>
+      <footer><span>CONTEXT GRAPHS PLAYGROUND</span><span>BUILT TO EXPLAIN DECISIONS, NOT AUTOMATE THEM.</span><span>ALL DATA IS FICTIONAL.</span></footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Context Graphs Playground | Operational trace</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif}body{margin:0;background:#0b1220;color:#dce8f5}
+header{padding:28px max(24px,5vw);border-bottom:1px solid #29384c}h1{font-size:clamp(24px,3vw,36px);margin:0 0 8px}
+p{color:#9eb0c3;line-height:1.6}main{display:grid;grid-template-columns:minmax(0,3fr) minmax(250px,1fr);gap:20px;padding:24px max(24px,5vw)}
+.panel{border:1px solid #29384c;border-radius:16px;background:#101b2c;padding:18px;min-width:0}
+svg{width:100%;height:auto;display:block}svg text{fill:#dce8f5;font-size:15px;font-weight:500;pointer-events:none}
+.node{cursor:pointer;outline:none}.node:focus circle,.node:hover circle{stroke-width:6}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#a5f3dc;line-height:1.7}.chip{color:#5eead4;font-size:12px;letter-spacing:.16em;font-weight:700}
+footer{padding:0 5vw 25px;color:#94a3b8;font-size:13px}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+</style></head><body><header><div class="chip">CONTEXT / OPERATIONS / EXPLAINABILITY</div>
+<h1>Operational Context Graph</h1><p>An incident is more than a status: trace the job, evidence, decision and policy behind it.</p></header>
+<main><section class="panel"><svg viewBox="0 0 1000 700" role="img" aria-label="Directed operational context graph">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="25" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#526178"/></marker></defs>
+<line x1="815.0" y1="350.0" x2="754.8" y2="491.1" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="815.0" y1="350.0" x2="245.2" y2="208.9" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="815.0" y1="350.0" x2="402.7" y2="121.7" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="754.8" y1="491.1" x2="597.3" y2="578.3" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="754.8" y1="491.1" x2="402.7" y2="578.3" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="754.8" y1="491.1" x2="245.2" y2="491.1" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="754.8" y1="491.1" x2="185.0" y2="350.0" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="402.7" y1="121.7" x2="597.3" y2="121.7" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="402.7" y1="121.7" x2="754.8" y2="208.9" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="245.2" y1="208.9" x2="402.7" y2="578.3" stroke="#526178" stroke-width="2" marker-end="url(#arrow)"/>
+<g class="node" tabindex="0" role="button" aria-label="Pickup delayed" data-detail="{&quot;id&quot;: &quot;incident-1042&quot;, &quot;type&quot;: &quot;incident&quot;, &quot;severity&quot;: &quot;high&quot;, &quot;status&quot;: &quot;open&quot;}"><circle cx="815.0" cy="350.0" r="33" fill="#162337" stroke="#fb7185" stroke-width="3"/><text x="815.0" y="402.0" text-anchor="middle">Pickup delayed</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Pickup job #314" data-detail="{&quot;id&quot;: &quot;job-314&quot;, &quot;type&quot;: &quot;job&quot;, &quot;scheduled_at&quot;: &quot;09:30&quot;}"><circle cx="754.8" cy="491.1" r="33" fill="#162337" stroke="#38bdf8" stroke-width="3"/><text x="754.8" y="543.1" text-anchor="middle">Pickup job #314</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Vehicle #82" data-detail="{&quot;id&quot;: &quot;vehicle-82&quot;, &quot;type&quot;: &quot;motorcycle&quot;}"><circle cx="597.3" cy="578.3" r="33" fill="#162337" stroke="#a78bfa" stroke-width="3"/><text x="597.3" y="630.3" text-anchor="middle">Vehicle #82</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Courier #21" data-detail="{&quot;id&quot;: &quot;courier-21&quot;, &quot;type&quot;: &quot;courier&quot;, &quot;shift&quot;: &quot;morning&quot;}"><circle cx="402.7" cy="578.3" r="33" fill="#162337" stroke="#fbbf24" stroke-width="3"/><text x="402.7" y="630.3" text-anchor="middle">Courier #21</text></g>
+<g class="node" tabindex="0" role="button" aria-label="North zone" data-detail="{&quot;id&quot;: &quot;zone-north&quot;, &quot;type&quot;: &quot;zone&quot;, &quot;city&quot;: &quot;Example City&quot;}"><circle cx="245.2" cy="491.1" r="33" fill="#162337" stroke="#34d399" stroke-width="3"/><text x="245.2" y="543.1" text-anchor="middle">North zone</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Assignment changed" data-detail="{&quot;id&quot;: &quot;event-817&quot;, &quot;type&quot;: &quot;event&quot;, &quot;timestamp&quot;: &quot;09:12&quot;}"><circle cx="185.0" cy="350.0" r="33" fill="#162337" stroke="#94a3b8" stroke-width="3"/><text x="185.0" y="402.0" text-anchor="middle">Assignment changed</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Location update missing" data-detail="{&quot;id&quot;: &quot;event-819&quot;, &quot;type&quot;: &quot;event&quot;, &quot;timestamp&quot;: &quot;09:26&quot;}"><circle cx="245.2" cy="208.9" r="33" fill="#162337" stroke="#94a3b8" stroke-width="3"/><text x="245.2" y="260.9" text-anchor="middle">Location update missing</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Reassign pickup" data-detail="{&quot;id&quot;: &quot;decision-06&quot;, &quot;type&quot;: &quot;decision&quot;, &quot;reason&quot;: &quot;Missed operational checkpoint&quot;}"><circle cx="402.7" cy="121.7" r="33" fill="#162337" stroke="#2dd4bf" stroke-width="3"/><text x="402.7" y="173.7" text-anchor="middle">Reassign pickup</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Late pickup escalation" data-detail="{&quot;id&quot;: &quot;policy-03&quot;, &quot;type&quot;: &quot;policy&quot;, &quot;threshold_min&quot;: 15}"><circle cx="597.3" cy="121.7" r="33" fill="#162337" stroke="#f472b6" stroke-width="3"/><text x="597.3" y="173.7" text-anchor="middle">Late pickup escalation</text></g>
+<g class="node" tabindex="0" role="button" aria-label="Reassignment requested" data-detail="{&quot;id&quot;: &quot;event-821&quot;, &quot;type&quot;: &quot;event&quot;, &quot;timestamp&quot;: &quot;09:47&quot;}"><circle cx="754.8" cy="208.9" r="33" fill="#162337" stroke="#94a3b8" stroke-width="3"/><text x="754.8" y="260.9" text-anchor="middle">Reassignment requested</text></g></svg></section><aside class="panel"><div class="chip">NODE INSPECTOR</div><h2 id="selection">Choose a node</h2>
+<p>Click a node to inspect its attributes and context. All data is synthetic.</p><pre id="detail">No node selected.</pre></aside></main>
+<footer>Reference implementation · local, dependency-free visualization · no external services</footer>
+<script>
+for (const node of document.querySelectorAll('.node')) {
+  const show = () => {
+    const data = JSON.parse(node.dataset.detail);
+    document.getElementById('selection').textContent = data.id;
+    document.getElementById('detail').textContent = JSON.stringify(data,null,2);
+  };
+  node.addEventListener('click', show);
+  node.addEventListener('keydown', e => {if(e.key === 'Enter' || e.key === ' '){e.preventDefault();show()}});
+}
+</script></body></html>
