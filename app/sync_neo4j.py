@@ -3,8 +3,8 @@
 import os
 from pathlib import Path
 
-from app.operations import connect, evaluate, operational_graph
 from app.neo4j_repository import Neo4jRepository
+from app.operations import connect, evaluate, operational_graph
 
 
 def load_env(path=".env"):

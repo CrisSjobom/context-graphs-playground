@@ -5,7 +5,6 @@ from pathlib import Path
 
 from .model import Graph
 
-
 COLORS = {
     "incident": "#fb7185", "job": "#38bdf8", "vehicle": "#a78bfa",
     "courier": "#fbbf24", "zone": "#34d399", "event": "#94a3b8",

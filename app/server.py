@@ -6,17 +6,17 @@ safe across the threads managed by ThreadingHTTPServer.
 No third-party runtime dependencies.
 """
 
-from contextlib import contextmanager
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
-from urllib.parse import urlparse, parse_qs
 import json
 import mimetypes
 import os
 import sqlite3
+from contextlib import contextmanager
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
-from app.graph import GraphError, shortest_path, neighborhood, validate_graph
-from app.operations import DomainError, connect, ingest, evaluate, operational_graph
+from app.graph import GraphError, neighborhood, shortest_path, validate_graph
+from app.operations import DomainError, connect, evaluate, ingest, operational_graph
 
 ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "web"

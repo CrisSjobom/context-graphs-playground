@@ -1,11 +1,11 @@
 
 """HTTP integration tests with isolated SQLite storage."""
 
+import json
 from concurrent.futures import ThreadPoolExecutor
 from http.server import ThreadingHTTPServer
 from threading import Thread
 from urllib.request import urlopen
-import json
 
 import pytest
 
