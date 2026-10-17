@@ -20,7 +20,9 @@ from app.operations import DomainError, connect, ingest, evaluate, operational_g
 
 ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "web"
-DB_PATH = os.environ.get("CONTEXTOPS_DB", str(ROOT / "contextops.sqlite"))
+DB_PATH = Path(
+    os.environ.get("CONTEXTOPS_DB", str(ROOT / "contextops.sqlite"))
+)
 
 GRAPH = validate_graph(
     json.loads((ROOT / "data" / "scenario.json").read_text(encoding="utf-8"))
@@ -33,7 +35,7 @@ with_db.close()
 
 @contextmanager
 def database():
-    """Open and close a SQLite connection within the calling thread."""
+    """Open a SQLite connection for the current operation."""
     db = connect(DB_PATH)
     try:
         yield db

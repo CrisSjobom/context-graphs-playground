@@ -1,20 +1,34 @@
 
-"""Integration tests for the ContextOps HTTP API."""
+"""HTTP integration tests with isolated SQLite storage."""
 
 from concurrent.futures import ThreadPoolExecutor
+from http.server import ThreadingHTTPServer
 from threading import Thread
 from urllib.request import urlopen
 import json
 
 import pytest
 
-from http.server import ThreadingHTTPServer
-from app.server import Handler
+import app.server as server_module
+from app.operations import connect
 
 
 @pytest.fixture
-def running_server():
-    server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+def running_server(tmp_path, monkeypatch):
+    """Run the HTTP server against an isolated temporary database."""
+    db_path = tmp_path / "contextops-test.sqlite"
+
+    # Redirect database operations without changing the developer's data.
+    monkeypatch.setattr(server_module, "DB_PATH", db_path)
+
+    db = connect(db_path)
+    db.close()
+
+    server = ThreadingHTTPServer(
+        ("127.0.0.1", 0),
+        server_module.Handler,
+    )
+
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
 
@@ -50,8 +64,9 @@ def test_concurrent_database_requests(running_server):
 
     for index, response in enumerate(responses):
         if index % 2 == 0:
-            assert "tasks" in response
+            assert response == {"tasks": []}
         else:
             assert response["task_id"] == "test-001"
-            assert "findings" in response
+            assert response["event_count"] == 0
+            assert response["findings"] == []
             assert "graph" in response
