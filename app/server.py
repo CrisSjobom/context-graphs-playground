@@ -156,6 +156,7 @@ class Handler(BaseHTTPRequestHandler):
             "/app.js": "app.js",
             "/favicon.svg": "favicon.svg",
             "/operations.html": "operations.html",
+            "/graph-explorer.js": "graph-explorer.js",
         }
 
         if path not in assets:
